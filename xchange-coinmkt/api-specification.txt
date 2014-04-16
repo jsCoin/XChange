@@ -1,0 +1,639 @@
+CoinMkt Exchange API Specification
+==================================
+
+Documentation
+-------------
+https://sandboxapi.coinmkt.com/Help
+
+URL
+https://api.coinmkt.com/v1
+
+==================================================
+
+API v1 Specification
+~~~~~~~~~~~~~~~~~~~~
+See documentation for setting up API keys.  It is important to note that this 
+API request whitelisting IP addresses that are allowed to access your account 
+via API.
+
+All request are restricted to 15 second intervals.  Polling more frequently may
+result in your API key being disabled.
+
+Authenticated requests require a session token that expires after 30 idle 
+minutes.
+
+All JSON responses contain Code and Err properties.  A Code < 0 indicates and 
+err occurred.  The error message will be in the Err property.
+
+Public API Methods
+==================
+
+Ticker
+------
+https://api.coinmkt.com/v1/ticker/{apiKey}/{pair}/{tradeLevel}
+
+Parameters
+----------
+apiKey - API key for the client account (String)
+pair - currency pair (String)
+tradeLevel - Level(0 -Play Money, 1 - Real Money) (integer)
+
+Response
+---------
+{
+  "Bid": 1.0,
+  "Ask": 2.0,
+  "Mid": 3.0,
+  "Last": 4.0,
+  "When": "2014-04-15T19:30:30.1413528+00:00",
+  "Timestamp": 6,
+  "Code": 7,
+  "Err": "sample string 8"
+}
+
+
+Orders
+------
+https://api.coinmkt.com/v1/book/{apiKey}/{pair}/{tradeLevel}?count={count}
+
+Parameters
+----------
+apiKey - API key for the client account (String)
+pair - currency pair (String)
+tradeLevel - Level(0 -Play Money, 1 - Real Money) (integer)
+count - max records in response (integer)
+
+Response
+--------
+{
+  "Bids": [
+    {
+      "TradeId": "sample string 1",
+      "Pair": "sample string 3_sample string 2",
+      "TradeSide": 4,
+      "Price": 5.0,
+      "Volume": 6.0,
+      "Status": 7,
+      "TradeLevel": 8,
+      "Date": "2014-04-15T20:37:52.2382046+00:00",
+      "Commission": 10.0,
+      "CommissionCoinSymbol": "sample string 11"
+    },
+    {
+      "TradeId": "sample string 1",
+      "Pair": "sample string 3_sample string 2",
+      "TradeSide": 4,
+      "Price": 5.0,
+      "Volume": 6.0,
+      "Status": 7,
+      "TradeLevel": 8,
+      "Date": "2014-04-15T20:37:52.2382046+00:00",
+      "Commission": 10.0,
+      "CommissionCoinSymbol": "sample string 11"
+    }
+  ],
+  "Asks": [
+    {
+      "TradeId": "sample string 1",
+      "Pair": "sample string 3_sample string 2",
+      "TradeSide": 4,
+      "Price": 5.0,
+      "Volume": 6.0,
+      "Status": 7,
+      "TradeLevel": 8,
+      "Date": "2014-04-15T20:37:52.2382046+00:00",
+      "Commission": 10.0,
+      "CommissionCoinSymbol": "sample string 11"
+    },
+    {
+      "TradeId": "sample string 1",
+      "Pair": "sample string 3_sample string 2",
+      "TradeSide": 4,
+      "Price": 5.0,
+      "Volume": 6.0,
+      "Status": 7,
+      "TradeLevel": 8,
+      "Date": "2014-04-15T20:37:52.2382046+00:00",
+      "Commission": 10.0,
+      "CommissionCoinSymbol": "sample string 11"
+    }
+  ],
+  "Timestamp": 1,
+  "Code": 2,
+  "Err": "sample string 3"
+}
+
+
+Currency
+--------
+https://api.coinmkt.com/v1/currency/{apiKey}
+
+Parameters
+----------
+apiKey - API key for the client account (String)
+
+Response
+--------
+{
+  "Symbols": [
+    {
+      "Name": "sample string 1",
+      "Symbol": "sample string 2",
+      "DecimalPlaces": 3,
+      "Crypto": 4
+    },
+    {
+      "Name": "sample string 1",
+      "Symbol": "sample string 2",
+      "DecimalPlaces": 3,
+      "Crypto": 4
+    }
+  ],
+  "Timestamp": 1,
+  "Code": 2,
+  "Err": "sample string 3"
+}
+
+
+Pairs
+-----
+https://api.coinmkt.com/v1/currency/pairs/{apiKey}
+
+Parameters
+----------
+apiKey - API key for the client account (String)
+
+Response
+--------
+{
+  "Pairs": [
+    {
+      "Pair": "sample string 1"
+    },
+    {
+      "Pair": "sample string 1"
+    }
+  ],
+  "Timestamp": 1,
+  "Code": 2,
+  "Err": "sample string 3"
+}
+
+
+Authenticated API Methods
+=========================
+Authenticated methods use a session token.  Getting a session token is a two 
+step process.  The documentation for generating a session token can be found
+at [Help/Authentication](https://sandboxapi.coinmkt.com/Help/Authentication).
+
+Before you can use these methods you must have an API Primary Key, API Secret,
+and API Secondary Key.  The IP address that you intend to request from must be
+in your "white-listed IPs".
+
+Session
+=======
+Sign In Key
+-----------
+https://api.coinmkt.com/v1/session/signinkey/{apiKey}
+The returned sign in key expires after 45 seconds.
+
+Parameters
+----------
+apiKey - API key for the client account (String)
+
+Response
+--------
+{
+  "Key": "sample string 1",
+  "Timestamp": 2,
+  "Code": 3,
+  "Err": "sample string 4"
+}
+
+
+Session Token
+-------------
+https://api.coinmkt.com/v1/session/new/{apiKey}/{tradeLevel}?hashedSignInKey={hashedSignInKey}
+The returned session token expires after 30 idle minutes.
+
+Parameters
+----------
+apiKey - API key for the client account (String)
+hashedSignInKey - (String)
+tradeLevel - Level(0 -Play Money, 1 - Real Money) (integer)
+
+Response
+--------
+{
+  "SessionToken": "sample string 1",
+  "Timestamp": 2,
+  "Code": 3,
+  "Err": "sample string 4"
+}
+
+
+Session Status
+--------------
+https://api.coinmkt.com/v1/session/status/{sessionToken}/{tradeLevel}
+
+Parameters
+----------
+sessionToken - (String)
+tradeLevel - Level(0 -Play Money, 1 - Real Money) (integer)
+
+Response
+--------
+{
+  "Timestamp": 1,
+  "Code": 2,
+  "Err": "sample string 3"
+}
+
+
+Session End
+-----------
+https://api.coinmkt.com/v1/session/end/{sessionToken}
+
+Parameters
+----------
+sessionToken - (String)
+
+Response
+--------
+{
+  "Timestamp": 1,
+  "Code": 2,
+  "Err": "sample string 3"
+}
+
+
+Trades
+======
+
+Completed Orders
+----------------
+https://api.coinmkt.com/v1/trades/{sessionToken}/{pair}/{tradeStatus}/{tradeLevel}
+
+Parameters
+----------
+sessionToken - session ID for users current trading session (String)
+pair - currency pair (String)
+tradeStatus - Status(1-Completed,2-Cancelled) (integer)
+tradeLevel - Level(0-Play Money,1-Real Money) (integer)
+
+Response
+--------
+{
+  "Trades": [
+    {
+      "TradeId": "sample string 1",
+      "Pair": "sample string 3_sample string 2",
+      "TradeSide": 4,
+      "TradeType": "sample string 5",
+      "Price": 6.0,
+      "Volume": 7.0,
+      "Status": 8,
+      "TradeLevel": 9,
+      "Date": "2014-04-16T16:25:03.3650881+00:00",
+      "Commission": 11.0,
+      "CommissionSymbol": "sample string 12"
+    },
+    {
+      "TradeId": "sample string 1",
+      "Pair": "sample string 3_sample string 2",
+      "TradeSide": 4,
+      "TradeType": "sample string 5",
+      "Price": 6.0,
+      "Volume": 7.0,
+      "Status": 8,
+      "TradeLevel": 9,
+      "Date": "2014-04-16T16:25:03.3650881+00:00",
+      "Commission": 11.0,
+      "CommissionSymbol": "sample string 12"
+    }
+  ],
+  "Timestamp": 1,
+  "Code": 2,
+  "Err": "sample string 3"
+}
+
+
+Active Orders
+-------------
+https://api.coinmkt.com/v1/orders/{sessionToken}/{pair}/{tradeStatus}/{tradeLevel}
+
+Parameters
+----------
+sessionToken - session ID for users current trading session (String)
+pair - currency pair (String)
+tradeStatus - Status(1-Completed,2-Cancelled) (integer)
+tradeLevel - Level(0-Play Money,1-Real Money) (integer)
+
+Response
+--------
+{
+  "Trades": [
+    {
+      "TradeId": "sample string 1",
+      "Pair": "sample string 3_sample string 2",
+      "TradeSide": 4,
+      "TradeType": "sample string 5",
+      "Price": 6.0,
+      "Volume": 7.0,
+      "Status": 8,
+      "TradeLevel": 9,
+      "Date": "2014-04-16T16:27:04.1572312+00:00",
+      "Commission": 11.0,
+      "CommissionSymbol": "sample string 12"
+    },
+    {
+      "TradeId": "sample string 1",
+      "Pair": "sample string 3_sample string 2",
+      "TradeSide": 4,
+      "TradeType": "sample string 5",
+      "Price": 6.0,
+      "Volume": 7.0,
+      "Status": 8,
+      "TradeLevel": 9,
+      "Date": "2014-04-16T16:27:04.1572312+00:00",
+      "Commission": 11.0,
+      "CommissionSymbol": "sample string 12"
+    }
+  ],
+  "Timestamp": 1,
+  "Code": 2,
+  "Err": "sample string 3"
+}
+
+
+Cancel Order (Post)
+-------------------
+https://api.coinmkt.com/v1/order/cancel/{sessionToken}/{tradeId}
+
+Parameters
+----------
+sessionToken - session ID for users current trading session (String)
+tradeId - The order ID generated when an order is created (String)
+
+Response
+--------
+{
+  "Timestamp": 1,
+  "Code": 2,
+  "Err": "sample string 3"
+}
+
+
+Cancel Many Orders (Post)
+-------------------------
+https://api.coinmkt.com/v1/order/cancel/many/{sessionToken}/{tradeLevel}/{tradeIds}
+
+Parameters
+----------
+sessionToken - session ID for users current trading session (String)
+tradeLevel - Level(0-Play Money,1-Real Money) (integer)
+tradeIds - A collection of the order IDs, separated by ; (String)
+
+Response
+--------
+{
+  "Trades": {
+    "sample string 1": 2,
+    "sample string 3": 4
+  },
+  "Timestamp": 1,
+  "Code": 2,
+  "Err": "sample string 3"
+}
+
+
+Cancel All Orders (Post)
+------------------------
+https://api.coinmkt.com/v1/order/cancel/all/{sessionToken}/{tradeLevel}
+
+Parameters
+----------
+sessionToken - session ID for users current trading session (String)
+tradeLevel - Level(0-Play Money,1-Real Money) (integer)
+
+Response
+--------
+{
+  "Trades": {
+    "sample string 1": 2,
+    "sample string 3": 4
+  },
+  "Timestamp": 1,
+  "Code": 2,
+  "Err": "sample string 3"
+}
+
+
+Order Status
+------------
+https://api.coinmkt.com/v1/order/status/{sessionToken}/{tradeId}
+
+Parameters
+----------
+sessionToken - session ID for users current trading session (String)
+tradeId - The order ID generated when an order is created (String)
+
+Response
+--------
+{
+  "Status": 1,
+  "Timestamp": 2,
+  "Code": 3,
+  "Err": "sample string 4"
+}
+
+
+Add Order (Post)
+----------------
+https://api.coinmkt.com/v1/order/new/{sessionToken}/{pair}/{tradeType}/{tradeSide}/{tradePrice}/{amount}/{tradeLevel}
+
+URI Parameters
+--------------
+sessionToken - session ID for users current trading session (String)
+pair - currency pair (String)
+tradeType - Type(0-Market,1-Limit) (integer)
+tradeSide - Side(0-Buy,1-Sell) (integer)
+tradePrice - Price to buy or sell at (decimal number)
+amount - Order Size: how much to buy or sell (decimal number)
+tradeLevel - Level(0-Play Money, 1-Real Money) (integer)
+
+Response
+--------
+{
+  "TradeId": "sample string 1",
+  "Timestamp": 2,
+  "Code": 3,
+  "Err": "sample string 4"
+}
+
+
+Add Orders (Post)
+-----------------
+https://api.coinmkt.com/v1/order/new/many/{sessionToken}
+
+URI Parameters
+--------------
+sessionToken - session ID for users current trading session (String)
+
+Body Parameters
+---------------
+FromCoinSymbol (String)
+ToCoinSymbol (String)
+TradeType (integer)
+TradeSide (integer)
+TradePrice (decimal number)
+Units (decimal number)
+TradeLevel (integer)
+
+Example Body
+------------
+[
+  {
+    "FromCoinSymbol": "sample string 1",
+    "ToCoinSymbol": "sample string 2",
+    "TradeType": 3,
+    "TradeSide": 4,
+    "TradePrice": 5.0,
+    "Units": 6.0,
+    "TradeLevel": 7
+  },
+  {
+    "FromCoinSymbol": "sample string 1",
+    "ToCoinSymbol": "sample string 2",
+    "TradeType": 3,
+    "TradeSide": 4,
+    "TradePrice": 5.0,
+    "Units": 6.0,
+    "TradeLevel": 7
+  }
+]
+
+Response
+--------
+{
+  "Trades": [
+    {
+      "TradeId": "sample string 1",
+      "Timestamp": 2,
+      "Code": 3,
+      "Err": "sample string 4"
+    },
+    {
+      "TradeId": "sample string 1",
+      "Timestamp": 2,
+      "Code": 3,
+      "Err": "sample string 4"
+    }
+  ],
+  "Timestamp": 1,
+  "Code": 2,
+  "Err": "sample string 3"
+}
+
+
+Balances
+========
+
+Balance
+-------
+https://api.coinmkt.com/v1/account/balance/{sessionToken}/{currency}/{tradeLevel}
+
+Parameters
+----------
+sessionToken - session ID for users current trading session (String)
+currency - e.g."BTC","LTC","USD" (String)
+tradeLevel - Level(0-Play Money,1-Real Money)
+
+Response
+--------
+{
+  "Balance": 1.0,
+  "Timestamp": 2,
+  "Code": 3,
+  "Err": "sample string 4"
+}
+ 
+
+Balances
+--------
+https://api.coinmkt.com/v1/account/balances/{sessionToken}/{tradeLevel}
+
+Parameters
+----------
+sessionToken - session ID for users current trading session (String)
+tradeLevel - Level(0-Play Money,1-Real Money)
+
+Response
+--------
+{
+  "Balances": [
+    {
+      "Name": "sample string 1",
+      "Symbol": "sample string 2",
+      "Balance": 3.0,
+      "DecimalPlaces": 4,
+      "Crypto": 5
+    },
+    {
+      "Name": "sample string 1",
+      "Symbol": "sample string 2",
+      "Balance": 3.0,
+      "DecimalPlaces": 4,
+      "Crypto": 5
+    }
+  ],
+  "PendingDeposits": [
+    {
+      "Id": 1,
+      "Confirmations": 2,
+      "RequiredConfirmations": 3,
+      "When": "2014-04-16T16:40:08.892417+00:00",
+      "Amount": 5.0,
+      "Symbol": "sample string 6"
+    },
+    {
+      "Id": 1,
+      "Confirmations": 2,
+      "RequiredConfirmations": 3,
+      "When": "2014-04-16T16:40:08.892417+00:00",
+      "Amount": 5.0,
+      "Symbol": "sample string 6"
+    }
+  ],
+  "InEscrow": [
+    {
+      "Amount": 1.0,
+      "Symbol": "sample string 2"
+    },
+    {
+      "Amount": 1.0,
+      "Symbol": "sample string 2"
+    }
+  ],
+  "DepositsWithdrawals": [
+    {
+      "Id": 1,
+      "Confirmations": 2,
+      "When": "2014-04-16T16:40:08.9079807+00:00",
+      "Amount": 4.0,
+      "Symbol": "sample string 5",
+      "Address": "sample string 6"
+    },
+    {
+      "Id": 1,
+      "Confirmations": 2,
+      "When": "2014-04-16T16:40:08.9079807+00:00",
+      "Amount": 4.0,
+      "Symbol": "sample string 5",
+      "Address": "sample string 6"
+    }
+  ],
+  "Timestamp": 1,
+  "Code": 2,
+  "Err": "sample string 3"
+}

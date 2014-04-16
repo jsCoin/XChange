@@ -96,7 +96,8 @@
 		<module>xchange-openexchangerates</module>
 		<module>xchange-vaultofsatoshi</module>
 		<module>xchange-vircurex</module>
-	</modules>
+    <module>xchange-coinmkt</module>
+  </modules>
 
 	<repositories>
 		<repository>
